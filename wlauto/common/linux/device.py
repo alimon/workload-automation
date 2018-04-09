@@ -209,13 +209,13 @@ class BaseLinuxDevice(Device):  # pylint: disable=abstract-method
         self.binaries_directory = self.path.join(self.working_directory, "bin")
 
     def is_file(self, filepath):
-        output = self.execute('if [ -f \'{}\' ]; then echo 1; else echo 0; fi'.format(filepath))
+        output = self.execute('[ -f \'{}\' ] && echo 1 || echo 0'.format(filepath))
         # output from ssh my contain part of the expression in the buffer,
         # split out everything except the last word.
         return boolean(output.split()[-1])  # pylint: disable=maybe-no-member
 
     def is_directory(self, filepath):
-        output = self.execute('if [ -d \'{}\' ]; then echo 1; else echo 0; fi'.format(filepath))
+        output = self.execute('[ -d \'{}\' ] && echo 1 || echo 0'.format(filepath))
         # output from ssh my contain part of the expression in the buffer,
         # split out everything except the last word.
         return boolean(output.split()[-1])  # pylint: disable=maybe-no-member
@@ -841,7 +841,7 @@ class LinuxDevice(BaseLinuxDevice):
         self.execute('rm -rf {}'.format(filepath), as_root=as_root)
 
     def file_exists(self, filepath):
-        output = self.execute('if [ -e \'{}\' ]; then echo 1; else echo 0; fi'.format(filepath))
+        output = self.execute('[ -e \'{}\' ] && echo 1 || echo 0'.format(filepath))
         # output from ssh my contain part of the expression in the buffer,
         # split out everything except the last word.
         return boolean(output.split()[-1])  # pylint: disable=maybe-no-member
