@@ -68,6 +68,9 @@ def ssh_get_shell(host, username, password=None, keyfile=None, port=None, timeou
 
     conn.sendline('shopt -s checkwinsize')
     conn.prompt()
+    conn.sendline('stty size')
+    conn.prompt()
+    logger.debug('pre size: %s' % conn.before)
     conn.setwinsize(500,200)
     conn.sendline('')
     conn.prompt()
@@ -75,6 +78,9 @@ def ssh_get_shell(host, username, password=None, keyfile=None, port=None, timeou
     conn.prompt()
     conn.sendline('stty cols 200')
     conn.prompt()
+    conn.sendline('stty size')
+    conn.prompt()
+    logger.debug('after size: %s' % conn.before)
     conn.setecho(False)
     return conn
 
